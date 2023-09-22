@@ -1,0 +1,12 @@
+# ignore All .log files
+*.log
+
+# ignore All pgm files that contains "_output"
+*_output.pgm
+
+# ignore All .o files
+*.o
+
+# ignore directories Results
+Results/
+temp_results/

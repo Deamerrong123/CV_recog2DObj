@@ -42,7 +42,12 @@ all:
 	make $(PROGRAM_NAME) 
 
 
+rundemo:
+	./image_demo objects.pgm objects_output.pgm
+
+
 clean:
 	(rm -f *.o; rm image_demo)
+
 
 (:
