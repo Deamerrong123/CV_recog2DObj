@@ -23,7 +23,7 @@ main(int argc, char **argv){
 
   Image an_image;
   if (!ReadImage(input_gray_img, &an_image)) {
-    cout <<"Can't open file " << input_file << endl;
+    cout <<"Can't open file " << input_gray_img << endl;
     return 0;
   }
 

@@ -37,9 +37,32 @@ PROGRAM_NAME=image_demo
 $(PROGRAM_NAME): $(Cpp_OBJ)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ) $(INCLUDES) $(LIBS_ALL)
 
+P1_OBJ=image.o p1.o
+PROGRAM_1=p1
+$(PROGRAM_1): $(P1_OBJ)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $^ $(INCLUDES) $(LIBS_ALL)
+
+P2_OBJ=image.o p2.o
+PROGRAM_2=p2
+$(PROGRAM_2): $(P2_OBJ)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $^ $(INCLUDES) $(LIBS_ALL)
+
+P3_OBJ=image.o p3.o
+PROGRAM_3=p3
+$(PROGRAM_3): $(P3_OBJ)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $^ $(INCLUDES) $(LIBS_ALL)
+
+P4_OBJ=image.o p4.o
+PROGRAM_4=p4
+$(PROGRAM_4): $(P4_OBJ)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $^ $(INCLUDES) $(LIBS_ALL)
 
 all: 
-	make $(PROGRAM_NAME) 
+	# make $(PROGRAM_NAME) 
+	make $(PROGRAM_1)
+	# make $(PROGRAM_2)
+	# make $(PROGRAM_3)
+	# make $(PROGRAM_4)
 
 
 rundemo:
@@ -47,7 +70,7 @@ rundemo:
 
 
 clean:
-	(rm -f *.o; rm image_demo)
+	(rm -f *.o; rm p1)
 
 
 (:
