@@ -66,7 +66,13 @@ all:
 
 
 rundemo:
-	./image_demo objects.pgm objects_output.pgm
+	./image_demo two_objects.pgm temp_results/output_two_objects_output.pgm;
+	open temp_results/output_two_objects_output.pgm
+
+run1:
+	./p1 two_objects.pgm 138 temp_results/output_two_objects_output.pgm;
+	open temp_results/output_two_objects_output.pgm;
+	open two_objects.pgm
 
 
 clean:
