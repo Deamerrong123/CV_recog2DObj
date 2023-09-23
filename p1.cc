@@ -18,7 +18,7 @@ main(int argc, char **argv){
     return 0;
   }
   const string input_gray_img(argv[1]);
-  string input_threshold(argv[2]);
+  const string input_threshold(argv[2]);
   const string output_img(argv[3]);
 
   Image an_image;
@@ -27,6 +27,7 @@ main(int argc, char **argv){
     return 0;
   }
 
+  // convert the input_threshold into integer.
   int threshold = std::stoi(input_threshold);
 
   if (threshold > 255) return 0;
