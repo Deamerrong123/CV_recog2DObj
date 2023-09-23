@@ -59,8 +59,8 @@ $(PROGRAM_4): $(P4_OBJ)
 
 all: 
 	# make $(PROGRAM_NAME) 
-	make $(PROGRAM_1)
-	# make $(PROGRAM_2)
+	# make $(PROGRAM_1)
+	make $(PROGRAM_2)
 	# make $(PROGRAM_3)
 	# make $(PROGRAM_4)
 
@@ -74,9 +74,13 @@ run1:
 	open temp_results/output_two_objects_output.pgm;
 	open two_objects.pgm
 
+run2:
+	./p2 temp_results/output_two_objects_output.pgm temp_results/output_p2_two_objects_ouput.pgm
+	# open temp_results/output_two_objects_output.pgm;
+	# open two_objects.pgm
 
 clean:
-	(rm -f *.o; rm p1)
+	(rm -f *.o; rm p2)
 
 
 (:
