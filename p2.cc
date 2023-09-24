@@ -11,9 +11,9 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
-int max_3(const int& first, const int& second, const int& third){
-  return (max(first,max(second,third)));
-}
+// int max_3(const int& first, const int& second, const int& third){
+//   return (max(first,max(second,third)));
+// }
 
 void print2DArr(int**& arr,const int& n_rows,const int& n_cols){
   for (size_t i = 0 ; i < n_rows; ++i){
@@ -36,8 +36,7 @@ void updatedEquTable( int& C, int& B,int& A,  DisjSets& eq_Table){
       A = C;
       B = C;
     }
-
-    }
+  }
 
   }
 
@@ -63,20 +62,23 @@ void Labeling(
     label2_ = labels[i][j-1];
     label3_ = labels[i-1][j];
 
-    if (label1_ > 0)
+    if (label1_ > 0) // if the pixel D been labeled
       current_level = label1_;
     else {
+      // elss, would copy label from C, if C labeled.
       current_level = max(label2_,label3_);
     }
 
-    }
-
-  if (current_level == 0) {
-    current_level = levels + pixel;
-    levels = current_level;
   }
-  labels[i][j] = pixel * current_level;
-  updatedEquTable( label2_ , label3_ , labels[i][j], eq_Table);
+
+  // if all 3 Neighbor of A is not labeled.
+  if (current_level == 0) {
+    // incr. if the A is region
+    current_level = levels + pixel;
+    levels = current_level; // update the counter of labels
+  }
+  labels[i][j] = pixel * current_level; // set the label if there is a region on A
+  updatedEquTable( label2_ , label3_ , labels[i][j], eq_Table); // update Equvalance table if needed.
   // if (labels[i][j] > 0){
   //
   // cout << "labels[i][j] -> " << labels[i][j] << endl;
