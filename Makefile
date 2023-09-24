@@ -42,7 +42,7 @@ PROGRAM_1=p1
 $(PROGRAM_1): $(P1_OBJ)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $^ $(INCLUDES) $(LIBS_ALL)
 
-P2_OBJ=image.o p2.o
+P2_OBJ=image.o p2.o DisjSets.o
 PROGRAM_2=p2
 $(PROGRAM_2): $(P2_OBJ)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $^ $(INCLUDES) $(LIBS_ALL)
@@ -59,8 +59,8 @@ $(PROGRAM_4): $(P4_OBJ)
 
 all: 
 	# make $(PROGRAM_NAME) 
-	make $(PROGRAM_1)
-	# make $(PROGRAM_2)
+	# make $(PROGRAM_1)
+	make $(PROGRAM_2)
 	# make $(PROGRAM_3)
 	# make $(PROGRAM_4)
 
@@ -70,13 +70,17 @@ rundemo:
 	open temp_results/output_two_objects_output.pgm
 
 run1:
-	./p1 two_objects.pgm 138 temp_results/output_two_objects_output.pgm;
+	./p1 two_objects.pgm 139 temp_results/output_two_objects_output.pgm;
 	open temp_results/output_two_objects_output.pgm;
-	open two_objects.pgm
+	# open two_objects.pgm
 
+run2:
+	./p2 temp_results/output_two_objects_output.pgm temp_results/output_p2_two_objects_ouput.pgm
+	# open temp_results/output_two_objects_output.pgm;
+	open temp_results/output_p2_two_objects_ouput.pgm;
 
 clean:
-	(rm -f *.o; rm p1)
+	(rm -f *.o; rm p2)
 
 
 (:
