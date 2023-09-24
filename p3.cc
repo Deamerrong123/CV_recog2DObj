@@ -22,16 +22,25 @@ main(int argc, char **argv){
   const string output_img(argv[3]);
 
   Image an_image;
-  if (!ReadImage(input_gray_img, &an_image)) {
+  if (!ReadImage(input_bin_img, &an_image)) {
     cout <<"Can't open file " << input_file << endl;
     return 0;
   }
 
-  // Draw a line from (0, 0) to (100, 240) having gray-value
-  // 200.
-  // DrawLine(0, 0, 100, 240, 200,
-	 //   &an_image); 
-  // 
+  // Object label
+
+  // row postions of center
+
+  // column position of the center
+
+  // Minimum moment of inertia
+
+  // object area
+
+  // roundedness
+
+  // Orientations
+
   // if (!WriteImage(output_img, an_image)){
   //   cout << "Can't write to file " << output_file << endl;
   //   return 0;
