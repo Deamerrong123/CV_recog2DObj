@@ -60,7 +60,7 @@ $(PROGRAM_4): $(P4_OBJ)
 all: 
 	# make $(PROGRAM_NAME) 
 	# make $(PROGRAM_1)
-	make $(PROGRAM_2)
+	# make $(PROGRAM_2)
 	# make $(PROGRAM_3)
 	# make $(PROGRAM_4)
 
