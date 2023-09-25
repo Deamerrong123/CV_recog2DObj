@@ -18,22 +18,27 @@ int convert ( const int& pixel , const int& label){
   // if pixel is 0, then will return 0
   // else if pixel is match with label, then will return 1
   // else if pixel is not match with label, then will return 0
-  int d = pow(pixel , PRIME ) % PRIME;
-  if (d - label == 0) return 1;
+  // int d = pow(pixel , PRIME ) % PRIME;
+  // if (d - label == 0) return 1;
+  if (pixel == label) return 1;
   return 0;
 }
 
+int solveForY( const double &theta, const double &rho , const double &x_val){
+  return (x_val * sin( theta ) + rho ) / cos( theta );
+}
+       
 
-void calculations(const Image& an_image,  const int& label , const int& n_rows, const int& n_cols, std::vector<doubld> values){
+void calculations(const Image& an_image,  const int& label , const int& n_rows, const int& n_cols, std::vector<double>& values){
   size_t i , j;
-  int a_pr, b_pr, c_pr;
+  int a_pr, b_pr, c_pr , b_ij;
   double x_bar, y_bar , region_area , a, b ,c ;
   double theta_1, theta_2, e_min, e_max , roundedness, rho;
   a_pr = b_pr = c_pr = region_area;
   x_bar = y_bar = 0;
   values[0] = label;
 
-  for (i = 0 ; i < n_row ; ++i){
+  for (i = 0 ; i < n_rows ; ++i){
     for ( j = 0 ; j < n_cols ; ++j){
       b_ij = convert( an_image.GetPixel(i,j), label );
       a_pr += i * i * b_ij;
@@ -54,7 +59,7 @@ void calculations(const Image& an_image,  const int& label , const int& n_rows, 
 
   a = a_pr - x_bar * x_bar * region_area;
   b = b_pr - 2 * x_bar * y_bar * region_area;
-  c = c_pr - y_bar * y_bar * regions_area;
+  c = c_pr - y_bar * y_bar * region_area;
   theta_1 = atan2( b , a - c) / 2.0; // theta1 in radians
   e_min = a * sin( theta_1 ) * sin( theta_1 ) - b * sin( theta_1 ) * cos( theta_1 ) + c* cos (theta_1) * cos(theta_1);
   values[3] = e_min;
@@ -68,14 +73,49 @@ void calculations(const Image& an_image,  const int& label , const int& n_rows, 
   values[7] = rho;
 }
 
-bool writeDataBase ( const std::string& filename , const std::vector<double>& values){
-  FILE *output = fopen(filenamea,"w");
+bool writeDataBase ( const std::string& filename , const std::vector<std::vector<double>>& values){
+  FILE *output = fopen(filename.c_str(), "w");  
   if (output == 0){
     cout << "Write Database: cannot open file." << endl;
     return false;
   }
   
-  fprintf(ouput, "%d %d %d %d %d %d %d %d", values)
+  for(auto row : values){
+    for (auto val : row){
+      fprintf(output, "%f \t",val);
+    }
+    fprintf(output , "\n");
+  }
+  fclose(output);
+  return true;
+}
+
+void Drawing( Image &an_image ,const double& x_bar, const double &y_bar , const double &theta , const double &rho, const int &length){
+
+  if (length <= 0) 
+    abort();
+  std::vector<int> x_vals; 
+  std::vector<int> y_vals;
+  int x_n , y_n;
+  size_t t;
+  
+  x_vals.push_back( (int) x_bar);
+  y_vals.push_back( (int) y_bar);
+
+  for (t = 0 ; t < length ; ++t){
+        x_n = x_vals.back() + 1; 
+         x_vals.push_back(x_n);
+         y_vals.push_back( solveForY( theta , rho , x_n));
+       }
+
+  for ( t = 0 ; t < length ; ++t){
+       x_n = x_vals.at(t);
+       y_n = y_vals.at(t);
+       an_image.SetPixel(x_n , y_n, 255);
+       }
+
+  // DrawLine(x_bar , y_bar , x_vals.back() , y_vals.back() , 255 , an_image);
+
 }
 
 
@@ -87,18 +127,16 @@ main(int argc, char **argv){
     return 0;
   }
   const string input_bin_img(argv[1]);
-  const string output_database(args[2]);
+  const string output_database(argv[2]);
   const string output_img(argv[3]);
   size_t i , j;
   int pixel;
-  std::vector<int> labels;
+  std::vector<int> labels_;
   std::vector<std::vector<double>> values_;
-  
-  
 
   Image an_image;
   if (!ReadImage(input_bin_img, &an_image)) {
-    cout <<"Can't open file " << input_fiAkkle << endl;
+    cout <<"Can't open file " << input_bin_img << endl;
     return 0;
   }
   const int n_rows = an_image.num_rows();
@@ -109,30 +147,27 @@ main(int argc, char **argv){
     for ( j = 0 ; j < n_cols ; ++j){
       pixel = an_image.GetPixel(i,j);
       if ( pixel > 0){
-        auto it = std::find(labels.begin() , labels.end() , pixel);
-        if (it == labels.end()) labels.push_back( pixel );
+        auto it = std::find(labels_.begin() , labels_.end() , pixel);
+        if (it == labels_.end()) labels_.push_back( pixel );
       }
     }
   }
 
-  std::vector<std::vector<doubld>> values_ ( labels.size() ,
-                                            std::vector<double>(0,8)); 
+  for( auto label : labels_ ){
+    std::vector<double> temp_vals(8);
+    calculations(an_image , label , n_rows, n_cols, temp_vals);
+    values_.push_back(temp_vals);
+  }
+  
 
-  // row postions of center
+  // Display positions and orientations of objects
+  for( auto label : values_ ) {
+    Drawing(an_image , label[1] , label[2] , label[6] , label[7] , 30);
+  }
 
-  // column position of the center
-
-  // Minimum moment of inertia
-
-  // object area
-
-  // roundedness
-
-  // Orientations
-
-  // if (!WriteImage(output_img, an_image)){
-  //   cout << "Can't write to file " << output_file << endl;
-  //   return 0;
-  // }
+  if (!WriteImage(output_img, an_image)){
+    cout << "Can't write to file " << output_img << endl;
+    return 0;
+  }
   return 0;
 }

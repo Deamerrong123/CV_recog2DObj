@@ -80,7 +80,7 @@ run2:
 	open temp_results/output_p2_two_objects_ouput.pgm;
 
 clean:
-	(rm -f *.o; rm p2)
+	(rm -f *.o; rm p3)
 
 
 (:
