@@ -18,7 +18,7 @@ using namespace ComputerVisionProjects;
 void print2DArr(int**& arr,const int& n_rows,const int& n_cols){
   for (size_t i = 0 ; i < n_rows; ++i){
     for (size_t j = 0; j < n_cols; ++j){
-      if (arr[i][j] > 0)
+      if (arr[i][j] > 1)
         printf("arr[%ld][%ld] = %d \t",i,j,arr[i][j]);
       }
   }
@@ -31,13 +31,12 @@ void updatedEquTable( int& C, int& B,int& A,  DisjSets& eq_Table){
       A = C;
       }
   else if (C > 0 && B > 0 && C != B){
-      eq_Table.unionSets(C,B);
+      eq_Table.unionSets(B,C);
       // C = B;
       A = C;
       B = C;
     }
   }
-
   }
 
 void Labeling(
@@ -66,16 +65,18 @@ void Labeling(
       current_level = label1_;
     else {
       // elss, would copy label from C, if C labeled.
-      current_level = max(label2_,label3_);
+      if (label2_ > 0) current_level = label2_;
+      else if (label2_ == 0 && label3_ > 0)
+                current_level = label3_;
     }
-
   }
-
   // if all 3 Neighbor of A is not labeled.
   if (current_level == 0) {
     // incr. if the A is region
     current_level = levels + pixel;
     levels = current_level; // update the counter of labels
+    cout << "pixel at this is -> " << pixel << endl;
+    cout << " labels went up by 1 --- level = " << levels << endl;
   }
   labels[i][j] = pixel * current_level; // set the label if there is a region on A
   updatedEquTable( label2_ , label3_ , labels[i][j], eq_Table); // update Equvalance table if needed.
@@ -117,7 +118,7 @@ bool SeqLablingAlgo(Image* an_image , int**& labels_ ){
     }
   }
 
-  // print2DArr(labels_,n_rows,n_cols);
+  print2DArr(labels_,n_rows,n_cols);
 
 
   return false;
@@ -156,7 +157,7 @@ main(int argc, char **argv){
   // Re-shaping the gray-level for labeled obj.
   for(i = 0 ; i < n_rows ; ++i){
     for (j = 0 ; j < n_cols; ++j){
-      an_image.SetPixel(i,j, labels_[i][j] * 7);
+      an_image.SetPixel(i,j, labels_[i][j] * 87);
     }
   }
 
