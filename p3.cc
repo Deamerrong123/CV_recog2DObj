@@ -28,7 +28,9 @@ int convert ( const int& pixel , const int& label){
 void calculations(const Image& an_image,  const int& label , const int& n_rows, const int& n_cols){
   size_t i , j;
   int a_pr, b_pr, c_pr;
-  double x_bar, y_bar , region_area;
+  double x_bar, y_bar , region_area , a, b ,c ;
+  double theta_1, theta_2, e_min, e_max , roundedness, rho;
+  std::vector<double> values{7};
   a_pr = b_pr = c_pr = region_area;
   x_bar = y_bar = 0;
 
@@ -48,16 +50,19 @@ void calculations(const Image& an_image,  const int& label , const int& n_rows, 
   x_bar = x_bar / region_area;
   y_bar = y_bar / region_area;
 
+  a = a_pr - x_bar * x_bar * region_area;
+  b = b_pr - 2 * x_bar * y_bar * region_area;
+  c = c_pr - y_bar * y_bar * regions_area;
+  theta_1 = atan2( b , a - c) / 2.0; // theta1 in radians
+  e_min = a * sin( theta_1 ) * sin( theta_1 ) - b * sin( theta_1 ) * cos( theta_1 ) + c* cos (theta_1) * cos(theta_1);
+  theta_2 = theta_1 + M_PI / 2.0;
+  e_max = a * sin( theta_2 ) * sin( theta_2 ) - b * sin( theta_2 ) * cos( theta_2 ) + c* cos (theta_2) * cos(theta_2);
+  roundedness = e_min / e_max;
+  rho = y_bar * cos(theta_1) - x_bar * sin( theta_1 );
 
 
 
-  for (i = 0 ; i < n_rows ; ++i) {
-    for (j = 0 ; j < n_cols ; ++j){
-         x_bar +=  i * b_ij;
 
-
-
-  
 
 }
 
