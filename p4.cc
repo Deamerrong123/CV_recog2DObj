@@ -17,7 +17,8 @@ using namespace ComputerVisionProjects;
 
 
 bool isEqual(double& val1 , double &val2 , double criteria){
-  if ((val1 - val2) * (val1 - val2) > criteria) return false;
+  if (
+    sqrt((val1 - val2) * (val1 - val2)) > criteria) return false;
   return true;
 }
 int convert ( const int& pixel , const int& label){
@@ -199,7 +200,7 @@ main(int argc, char **argv){
     D_values.push_back(temp_vals);
   }
 
-  scanning( D_values, D_database , 800 , D_recognized);
+  scanning( D_values, D_database , 105 , D_recognized);
 
   for ( auto label : D_recognized){
     Drawing(an_image , label[1] , label[2] , label[6] * M_PI /180 , label[7] , 20);
