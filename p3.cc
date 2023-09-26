@@ -162,7 +162,7 @@ main(int argc, char **argv){
 
   // Display positions and orientations of objects
   for( auto label : values_ ) {
-    Drawing(an_image , label[1] , label[2] , label[6] , label[7] , 20);
+    Drawing(an_image , label[1] , label[2] , value[6] * M_PI /180 , label[7] , 20);
   }
 
   if (!WriteImage(output_img, an_image)){

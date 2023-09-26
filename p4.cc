@@ -114,7 +114,6 @@ void scanning (
     for (auto row_testing : comparison ){
       score = 0;
       for (i = 3 ; i < 6 ; ++i){
-        cout << "_testing --> " << row_testing[i] << "   _standard --> " << row_standard[i] << endl;
         if (isEqual( row_testing[i] , row_standard[i] , epsilon ))
           score++;
       }
@@ -142,8 +141,6 @@ void Drawing( Image &an_image ,const double& x_bar, const double &y_bar , const 
         x_n = x_vals.back() + 1; 
          x_vals.push_back(x_n);
          y_vals.push_back( solveForY( theta , rho , x_n));
-    cout << "x_n = " << x_n << endl;
-    cout << "y_n = " << y_n <<endl;
        }
   //
   for ( t = 0 ; t < length ; ++t){
@@ -202,10 +199,10 @@ main(int argc, char **argv){
     D_values.push_back(temp_vals);
   }
 
-  scanning( D_values, D_database , 28 , D_recognized);
+  scanning( D_values, D_database , 800 , D_recognized);
 
   for ( auto label : D_recognized){
-    Drawing(an_image , label[1] , label[2] , label[6] , label[7] , 5);
+    Drawing(an_image , label[1] , label[2] , label[6] * M_PI /180 , label[7] , 20);
   }
   
 
