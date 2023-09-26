@@ -60,8 +60,8 @@ $(PROGRAM_4): $(P4_OBJ)
 all: 
 	# make $(PROGRAM_NAME) 
 	# make $(PROGRAM_1)
-	make $(PROGRAM_2)
-	# make $(PROGRAM_3)
+	# make $(PROGRAM_2)
+	make $(PROGRAM_3)
 	# make $(PROGRAM_4)
 
 
@@ -78,8 +78,9 @@ run2:
 	open temp_results/output_p2_two_objects_ouput.pgm;
 
 run3:
-	./p3 temp_results/output_p2_two_objects_output.pgm Database.txt temp_results/output_p3_two_objects_ouput.pgm
-	open temp_results/output_p2_two_objects_ouput.pgm;
+	./p3 Results/output_p2_many_objects_2.pgm temp_results/Database.txt temp_results/output_p3_many_objects_2.pgm
+	open temp_results/output_p3_many_objects_2.pgm;
+	vi temp_results/Database.txt
 
 clean:
 	(rm -f *.o; rm p3)

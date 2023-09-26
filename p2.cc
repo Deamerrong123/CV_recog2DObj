@@ -59,15 +59,11 @@ void Labeling(
       // elss, would copy label from C, if C labeled.
       if (label2_ > 0) {
               current_level = label2_;
-              cout << "C > 0 -- C = " << label2_ << endl;
             }
       else if (label2_ == 0 && label3_ > 0){
                 current_level = label3_;
-              cout << "C == 0, B > 0" << endl;
-              cout << "C -> " << label2_ << "B -> " << label3_ << endl;
             }
     }
-    // cout << "Current_level --> " << current_level << endl;
   }
   // if all 3 Neighbor of A is not labeled.
   if (current_level == 0) {
@@ -88,16 +84,12 @@ bool SeqLablingAlgo(Image* an_image , int**& labels_ ){
   size_t i, j;
   DisjSets EqTable_(n_rows * n_cols);
 
-  cout << "num_rows = " << n_rows << endl;
-  cout << "num_columns = " << n_cols << endl;
 
-  cout << "\n" << endl;
 
   for (i = 0; i < n_rows; ++i){
     for (j = 0 ; j < n_cols ; ++j)
       Labeling(i,j,an_image,labels_,levels_ , EqTable_);
   }
-  
 
   // Second pass
   for (i = 0 ; i < n_rows ; ++i){
@@ -106,7 +98,6 @@ bool SeqLablingAlgo(Image* an_image , int**& labels_ ){
     }
   }
 
-  print2DArr(labels_,n_rows,n_cols);
 
 
   return false;
@@ -149,6 +140,7 @@ main(int argc, char **argv){
     }
   }
 
+  // Deallocated memory
   for (i = 0; i < n_rows ; i++)
     delete labels_[i];
   delete labels_;
