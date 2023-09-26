@@ -20,8 +20,8 @@ DisjSets::DisjSets( int numElements ) : s( numElements )
 void DisjSets::unionSets( int root1, int root2 )
 {
   int s1, s2;
-  s1 = find(root1);
-  s2 = find(root2);
+  s1 = find(root1); // looking for the root of root1
+  s2 = find(root2); // looking for the root of root2
   if (s1 != s2){
     if( s[ s2 ] < s[ s1 ] )  // root2 is deeper
         s[ s1 ] = s2;        // Make root2 new root

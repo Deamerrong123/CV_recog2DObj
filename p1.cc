@@ -1,5 +1,6 @@
 // Qizhao Rong
-// p1.cc
+// Due (09/26)
+// p1.cc : Read a given pgm image, convert those different gray-levels into 0 or 255, and saved it to another pgm image  
 // 
 
 #include "image.h"
@@ -30,10 +31,13 @@ main(int argc, char **argv){
   // convert the input_threshold into integer.
   int threshold = std::stoi(input_threshold);
 
-  if (threshold > 255) return 0;
+  if (threshold > 255) return 0; 
 
   Image another_img(an_image);
 
+  // scanning through the image
+  // And convert any pixel that less than threshold into 0;
+  // any pixel >= threshold then convert to 255.
   for (size_t i = 0; i < an_image.num_rows() ; ++i){
     for (size_t j = 0; j < an_image.num_columns();++j){
       if (an_image.GetPixel(i,j) < threshold)
@@ -43,15 +47,11 @@ main(int argc, char **argv){
     }
   }
   
-
-  // Draw a line from (0, 0) to (100, 240) having gray-value
-  // 200.
-  // DrawLine(0, 0, 100, 240, 200,
-	 //   &an_image); 
-  // 
+  // Save the binary-image to another pgm file.
   if (!WriteImage(output_img, another_img)){
     cout << "Can't write to file " << output_img << endl;
     return 0;
   }
+
   return 0;
 }
