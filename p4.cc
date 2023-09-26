@@ -10,6 +10,116 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+
+bool isEqual(double& val1 , double &val2 , double criteria){
+  if ((val1 - val2) * (val1 - val2) > criteria) return false;
+  return true;
+}
+int convert ( const int& pixel , const int& label){
+  // Fermat's Little Theorem
+  // if pixel is 0, then will return 0
+  // else if pixel is match with label, then will return 1
+  // else if pixel is not match with label, then will return 0
+  // int d = pow(pixel , PRIME ) % PRIME;
+  // if (d - label == 0) return 1;
+  if (pixel == label) return 1;
+  return 0;
+}
+
+int solveForY( const double &theta, const double &rho , const double &x_val){
+  return (x_val * sin( theta ) + rho ) / cos( theta );
+}
+       
+void calculations(const Image& an_image,  const int& label , const int& n_rows, const int& n_cols, std::vector<double>& values){
+  size_t i , j;
+  int a_pr, b_pr, c_pr , b_ij;
+  double x_bar, y_bar , region_area , a, b ,c ;
+  double theta_1, theta_2, e_min, e_max , roundedness, rho;
+  a_pr = b_pr = c_pr = region_area;
+  x_bar = y_bar = 0;
+  values[0] = label;
+
+  for (i = 0 ; i < n_rows ; ++i){
+    for ( j = 0 ; j < n_cols ; ++j){
+      b_ij = convert( an_image.GetPixel(i,j), label );
+      a_pr += i * i * b_ij;
+      b_pr += i * j * b_ij;
+      c_pr += j * j * b_ij;
+      region_area += b_ij; 
+      x_bar += i * b_ij;
+      y_bar += j * b_ij;
+    }
+  }
+
+  b_pr = b_pr * 2; // b_pr = 2 * \sum {\sum { i * j * b_ij}};
+  x_bar = x_bar / region_area;
+  values[1] = x_bar;
+
+  y_bar = y_bar / region_area;
+  values[2] = y_bar;
+
+  a = a_pr - x_bar * x_bar * region_area;
+  b = b_pr - 2 * x_bar * y_bar * region_area;
+  c = c_pr - y_bar * y_bar * region_area;
+  theta_1 = atan2( b , a - c) / 2.0; // theta1 in radians
+  e_min = a * sin( theta_1 ) * sin( theta_1 ) - b * sin( theta_1 ) * cos( theta_1 ) + c* cos (theta_1) * cos(theta_1);
+  values[3] = e_min;
+  values[4] = region_area;
+  theta_2 = theta_1 + M_PI / 2.0;
+  e_max = a * sin( theta_2 ) * sin( theta_2 ) - b * sin( theta_2 ) * cos( theta_2 ) + c* cos (theta_2) * cos(theta_2);
+  roundedness = e_min / e_max;
+  values[5] = roundedness;
+  rho = y_bar * cos(theta_1) - x_bar * sin( theta_1 );
+  values[6] = theta_1 * 180 / M_PI;
+  values[7] = rho;
+}
+
+bool ReadDatabase( const std::string& filename , const std::vector<std::vector<double>>& values){
+
+  ifstream input_f;
+  string readline;
+  double value;
+  input_f.open( filename );
+  if (!input_f.is_open()){
+    cout << "Write Database: cannot open file." << endl;
+    return false;
+  }
+  while(getline(input_f, readline)){
+    stringstream line(readline);
+    std::vector<double> row_values;
+    
+    while( line >> value){
+      row_values.push_back(value);
+    }
+    values.push_back( row_values );
+  }
+  
+  input_f.close();
+  return true;
+}
+
+void scanning ( 
+               std::vector<std::vector<double>> & comparison , const  std::vector<std::vector<double>> &standard ,
+               const double& epsilon , std::vector<std::vector<double>>& recognized ){
+  size_t i , j;
+  int score;
+
+  for (row_standard : standard){
+    for (row_testing : comparison ){
+      score = 0;
+      for (i = 3 ; i < 6 ; ++i){
+        if (isEqual( row_testing[i] , row_standard[i] , epsilon ))
+          score++;
+      }
+      if (score >= 2){
+        recognized.push_back(row_testing);
+        }
+      }
+    }
+  }
+}
+
+
 int
 main(int argc, char **argv){
   
@@ -20,6 +130,10 @@ main(int argc, char **argv){
   const string input_bin_img(argv[1]);
   const string input_database(args[2]);
   const string output_img(argv[3]);
+  std::vector<std::vector<double>> 2D_database;
+  std::vector<std::vector<doubld>> 2D_values;
+  std::vector<std::vector<doubld>> 2D_recognized;
+  std::vector<int> v_labels;
 
   Image an_image;
   if (!ReadImage(input_gray_img, &an_image)) {
@@ -27,11 +141,32 @@ main(int argc, char **argv){
     return 0;
   }
 
-  // Draw a line from (0, 0) to (100, 240) having gray-value
-  // 200.
-  // DrawLine(0, 0, 100, 240, 200,
-	 //   &an_image); 
-  // 
+  ReadDatabase( input_database , 2D_database);
+
+  const int n_rows = an_image.num_rows();
+  const int n_cols = an_image.num_columns();
+
+  // Object label
+  for (i = 0 ; i < n_rows ; ++i){
+    for ( j = 0 ; j < n_cols ; ++j){
+      pixel = an_image.GetPixel(i,j);
+      if ( pixel > 0){
+        auto it = std::find(v_labels.begin() , v_labels.end() , pixel);
+        if (it == v_labels.end()) v_labels.push_back( pixel );
+      }
+    }
+  }
+
+  for( auto label : v_labels){
+    std::vector<double> temp_vals(8);
+    calculations(an_image , label , n_rows, n_cols, temp_vals);
+    2D_values.push_back(temp_vals);
+  }
+
+  scanning( 2D_values, 2D_database , 1 , 2D_recognized);
+  
+
+
   // if (!WriteImage(output_img, an_image)){
   //   cout << "Can't write to file " << output_file << endl;
   //   return 0;

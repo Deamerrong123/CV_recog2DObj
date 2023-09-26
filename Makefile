@@ -78,10 +78,13 @@ run2:
 	open temp_results/output_p2_two_objects_ouput.pgm;
 
 run3:
-	./p3 Results/output_p2_many_objects_2.pgm temp_results/Database.txt temp_results/output_p3_many_objects_2.pgm
-	open temp_results/output_p3_many_objects_2.pgm;
-	vi temp_results/Database.txt
+	./p3 two_objects.pgm temp_results/Database.txt temp_results/output_p3_two_objects.pgm
+	open temp_results/output_p3_two_objects.pgm;
 
+run4:
+	./p4 output_p3_many_objects_1.pgm temp_results/Database.txt temp_results/output_p4_many_objects_1.pgm
+	./p4 output_p3_many_objects_2.pgm temp_results/Database.txt temp_results/output_p4_many_objects_2.pgm
+	# open temp_results/output_p3_many_objects_2.pgm;
 clean:
 	(rm -f *.o; rm p3)
 
