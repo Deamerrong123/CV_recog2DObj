@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <algorithm>
 #include <cmath>
@@ -84,12 +85,13 @@ bool ReadDatabase( const std::string& filename , std::vector<std::vector<double>
   string readline;
   double value;
   input_f.open( filename );
+
   if (!input_f.is_open()){
     cout << "Write Database: cannot open file." << endl;
     return false;
   }
   while( getline(input_f, readline) ){
-    stringstream line(readline);
+    std::stringstream line (readline);
     std::vector<double> row_values;
     
     while( line >> value){
@@ -112,6 +114,7 @@ void scanning (
     for (auto row_testing : comparison ){
       score = 0;
       for (i = 3 ; i < 6 ; ++i){
+        cout << "_testing --> " << row_testing[i] << "   _standard --> " << row_standard[i] << endl;
         if (isEqual( row_testing[i] , row_standard[i] , epsilon ))
           score++;
       }
@@ -120,13 +123,44 @@ void scanning (
         }
       }
     }
+  cout << "sizeof recognized() --> " << recognized.size() << endl;
   }
+
+void Drawing( Image &an_image ,const double& x_bar, const double &y_bar , const double &theta , const double &rho, const int &length){
+
+  if (length <= 0) 
+    abort();
+  std::vector<int> x_vals; 
+  std::vector<int> y_vals;
+  int x_n , y_n;
+  size_t t;
+  
+  x_vals.push_back( (int) x_bar);
+  y_vals.push_back( (int) y_bar);
+
+  for (t = 0 ; t < length ; ++t){
+        x_n = x_vals.back() + 1; 
+         x_vals.push_back(x_n);
+         y_vals.push_back( solveForY( theta , rho , x_n));
+    cout << "x_n = " << x_n << endl;
+    cout << "y_n = " << y_n <<endl;
+       }
+  //
+  for ( t = 0 ; t < length ; ++t){
+       x_n = x_vals.at(t);
+       y_n = y_vals.at(t);
+       an_image.SetPixel(x_n , y_n, 255);
+       }
+
+  // DrawLine(x_bar , y_bar , x_vals.back() , y_vals.back() , 255 , &an_image);
+
+}
 
 
 int
 main(int argc, char **argv){
   
-  if (argc!=3) {
+  if (argc!=4) {
     printf("Usage: %s file1 file2\n", argv[0]);
     return 0;
   }
@@ -168,13 +202,17 @@ main(int argc, char **argv){
     D_values.push_back(temp_vals);
   }
 
-  scanning( D_values, D_database , 1 , D_recognized);
+  scanning( D_values, D_database , 28 , D_recognized);
+
+  for ( auto label : D_recognized){
+    Drawing(an_image , label[1] , label[2] , label[6] , label[7] , 5);
+  }
   
 
 
-  // if (!WriteImage(output_img, an_image)){
-  //   cout << "Can't write to file " << output_file << endl;
-  //   return 0;
-  // }
+  if (!WriteImage(output_img, an_image)){
+    cout << "Can't write to file " << output_img << endl;
+    return 0;
+  }
   return 0;
 }

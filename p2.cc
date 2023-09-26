@@ -136,7 +136,7 @@ main(int argc, char **argv){
   // Re-shaping the gray-level for labeled obj.
   for(i = 0 ; i < n_rows ; ++i){
     for (j = 0 ; j < n_cols; ++j){
-      an_image.SetPixel(i,j, labels_[i][j] * 17);
+      an_image.SetPixel(i,j, labels_[i][j] * 7);
     }
   }
 

@@ -59,8 +59,8 @@ $(PROGRAM_4): $(P4_OBJ)
 
 all: 
 	# make $(PROGRAM_NAME) 
-	# make $(PROGRAM_1)
-	# make $(PROGRAM_2)
+	make $(PROGRAM_1)
+	make $(PROGRAM_2)
 	# make $(PROGRAM_3)
 	make $(PROGRAM_4)
 
@@ -70,20 +70,23 @@ rundemo:
 	open temp_results/output_two_objects_output.pgm
 
 run1:
-	./p1 two_objects.pgm 139 temp_results/output_two_objects_output.pgm;
-	open temp_results/output_two_objects_output.pgm;
+	./p1 many_objects_1.pgm 139 temp_results/output_p1_many_objects_1.pgm;
+	# ./p1 many_objects_2.pgm 139 temp_results/output_p1_many_objects_2.pgm;
+	# open temp_results/output_two_objects_output.pgm;
 
 run2:
-	./p2 temp_results/output_two_objects_output.pgm temp_results/output_p2_two_objects_ouput.pgm
-	open temp_results/output_p2_two_objects_ouput.pgm;
+	./p2 temp_results/output_p1_many_objects_1.pgm temp_results/output_p2_many_objects_1.pgm
+	# ./p2 temp_results/output_p1_many_objects_2.pgm temp_results/output_p2_many_objecs_2.pgm
+	open temp_results/output_p2_many_objects_1.pgm;
 
 run3:
 	./p3 temp_results/output_p2_two_objects_ouput.pgm temp_results/Database.txt temp_results/output_p3_two_objects.pgm
 	open temp_results/output_p3_two_objects.pgm;
 
 run4:
-	./p4 output_p3_many_objects_1.pgm temp_results/Database.txt temp_results/output_p4_many_objects_1.pgm
-	./p4 output_p3_many_objects_2.pgm temp_results/Database.txt temp_results/output_p4_many_objects_2.pgm
+	./p4 temp_results/output_p2_many_objects_1.pgm temp_results/Database.txt temp_results/output_p4_many_objects_1.pgm
+	# ./p4 output_p3_many_objects_2.pgm temp_results/Database.txt temp_results/output_p4_many_objects_2.pgm
+	open temp_results/output_p4_many_objects_1.pgm;
 	# open temp_results/output_p3_many_objects_2.pgm;
 clean:
 	(rm -f *.o; rm p3)
