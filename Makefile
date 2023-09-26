@@ -75,9 +75,10 @@ run1:
 	# open two_objects.pgm
 
 run2:
-	./p2 temp_results/output_two_objects_output.pgm temp_results/output_p2_two_objects_ouput.pgm
+	./p2 temp_results/output_two_objects_output.pgm temp_results/output_p2_two_objects_ouput.pgm > temp_results/console.txt
 	# open temp_results/output_two_objects_output.pgm;
 	open temp_results/output_p2_two_objects_ouput.pgm;
+	# vi temp_results/console.txt
 
 clean:
 	(rm -f *.o; rm p2)
