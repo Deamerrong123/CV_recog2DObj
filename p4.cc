@@ -1,6 +1,6 @@
 // Qizhao Rong
-// p4.cc
-// 
+// Due (09/26)
+// p4.cc : Read a given binary pgm image,
 
 #include "image.h"
 #include <cstdio>

@@ -41,6 +41,15 @@ int solveForY( const double &theta, const double &rho , const double &x_val){
 }
        
 
+/**
+ * @brief 
+ * 
+ * @param an_image 
+ * @param label 
+ * @param n_rows 
+ * @param n_cols 
+ * @param values 
+ */
 void calculations(const Image& an_image,  const int& label , const int& n_rows, const int& n_cols, std::vector<double>& values){
   size_t i , j;
   int a_pr, b_pr, c_pr , b_ij;
@@ -85,6 +94,14 @@ void calculations(const Image& an_image,  const int& label , const int& n_rows, 
   values[7] = rho;
 }
 
+/**
+ * @brief 
+ * 
+ * @param filename 
+ * @param values 
+ * @return true 
+ * @return false 
+ */
 bool writeDataBase ( const std::string& filename , const std::vector<std::vector<double>>& values){
   FILE *output = fopen(filename.c_str(), "w");  
   if (output == 0){
@@ -102,6 +119,16 @@ bool writeDataBase ( const std::string& filename , const std::vector<std::vector
   return true;
 }
 
+/**
+ * @brief 
+ * 
+ * @param an_image 
+ * @param x_bar 
+ * @param y_bar 
+ * @param theta 
+ * @param rho 
+ * @param length 
+ */
 void Drawing( Image &an_image ,const double& x_bar, const double &y_bar , const double &theta , const double &rho, const int &length){
 
   if (length <= 0) 
@@ -174,7 +201,7 @@ main(int argc, char **argv){
 
   // Display positions and orientations of objects
   for( auto label : values_ ) {
-    Drawing(an_image , label[1] , label[2] , value[6] * M_PI /180 , label[7] , 20);
+    Drawing(an_image , label[1] , label[2] , label[6] * M_PI /180 , label[7] , 20);
   }
 
   if (!WriteImage(output_img, an_image)){
