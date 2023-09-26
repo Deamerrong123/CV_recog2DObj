@@ -6,6 +6,10 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <fstream>
 
 using namespace std;
 using namespace ComputerVisionProjects;
@@ -74,7 +78,7 @@ void calculations(const Image& an_image,  const int& label , const int& n_rows, 
   values[7] = rho;
 }
 
-bool ReadDatabase( const std::string& filename , const std::vector<std::vector<double>>& values){
+bool ReadDatabase( const std::string& filename , std::vector<std::vector<double>>& values){
 
   ifstream input_f;
   string readline;
@@ -84,7 +88,7 @@ bool ReadDatabase( const std::string& filename , const std::vector<std::vector<d
     cout << "Write Database: cannot open file." << endl;
     return false;
   }
-  while(getline(input_f, readline)){
+  while( getline(input_f, readline) ){
     stringstream line(readline);
     std::vector<double> row_values;
     
@@ -104,8 +108,8 @@ void scanning (
   size_t i , j;
   int score;
 
-  for (row_standard : standard){
-    for (row_testing : comparison ){
+  for (auto row_standard : standard){
+    for (auto row_testing : comparison ){
       score = 0;
       for (i = 3 ; i < 6 ; ++i){
         if (isEqual( row_testing[i] , row_standard[i] , epsilon ))
@@ -117,7 +121,6 @@ void scanning (
       }
     }
   }
-}
 
 
 int
@@ -128,20 +131,22 @@ main(int argc, char **argv){
     return 0;
   }
   const string input_bin_img(argv[1]);
-  const string input_database(args[2]);
+  const string input_database(argv[2]);
   const string output_img(argv[3]);
-  std::vector<std::vector<double>> 2D_database;
-  std::vector<std::vector<doubld>> 2D_values;
-  std::vector<std::vector<doubld>> 2D_recognized;
+  std::vector<std::vector<double>> D_database;
+  std::vector<std::vector<double>> D_values;
+  std::vector<std::vector<double>> D_recognized;
   std::vector<int> v_labels;
+  int pixel;
+  size_t i , j;
 
   Image an_image;
-  if (!ReadImage(input_gray_img, &an_image)) {
-    cout <<"Can't open file " << input_file << endl;
+  if (!ReadImage(input_bin_img , &an_image)) {
+    cout <<"Can't open file " << input_bin_img << endl;
     return 0;
   }
 
-  ReadDatabase( input_database , 2D_database);
+  ReadDatabase( input_database , D_database);
 
   const int n_rows = an_image.num_rows();
   const int n_cols = an_image.num_columns();
@@ -160,10 +165,10 @@ main(int argc, char **argv){
   for( auto label : v_labels){
     std::vector<double> temp_vals(8);
     calculations(an_image , label , n_rows, n_cols, temp_vals);
-    2D_values.push_back(temp_vals);
+    D_values.push_back(temp_vals);
   }
 
-  scanning( 2D_values, 2D_database , 1 , 2D_recognized);
+  scanning( D_values, D_database , 1 , D_recognized);
   
 
 

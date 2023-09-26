@@ -61,8 +61,8 @@ all:
 	# make $(PROGRAM_NAME) 
 	# make $(PROGRAM_1)
 	# make $(PROGRAM_2)
-	make $(PROGRAM_3)
-	# make $(PROGRAM_4)
+	# make $(PROGRAM_3)
+	make $(PROGRAM_4)
 
 
 rundemo:
@@ -78,7 +78,7 @@ run2:
 	open temp_results/output_p2_two_objects_ouput.pgm;
 
 run3:
-	./p3 two_objects.pgm temp_results/Database.txt temp_results/output_p3_two_objects.pgm
+	./p3 temp_results/output_p2_two_objects_ouput.pgm temp_results/Database.txt temp_results/output_p3_two_objects.pgm
 	open temp_results/output_p3_two_objects.pgm;
 
 run4:
