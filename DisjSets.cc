@@ -19,14 +19,19 @@ DisjSets::DisjSets( int numElements ) : s( numElements )
  */
 void DisjSets::unionSets( int root1, int root2 )
 {
-    if( s[ root2 ] < s[ root1 ] )  // root2 is deeper
-        s[ root1 ] = root2;        // Make root2 new root
+  int s1, s2;
+  s1 = find(root1);
+  s2 = find(root2);
+  if (s1 != s2){
+    if( s[ s2 ] < s[ s1 ] )  // root2 is deeper
+        s[ s1 ] = s2;        // Make root2 new root
     else
     {
-        if( s[ root1 ] == s[ root2 ] )
-            s[ root1 ]--;          // Update height if same
-        s[ root2 ] = root1;        // Make root1 new root
+        if( s[ s1 ] == s[ s2 ] )
+            s[ s1 ]--;          // Update height if same
+        s[ s2 ] = s1;        // Make root1 new root
     }
+  }
 }
 
 

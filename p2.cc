@@ -11,33 +11,21 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
-// int max_3(const int& first, const int& second, const int& third){
-//   return (max(first,max(second,third)));
-// }
 
 void print2DArr(int**& arr,const int& n_rows,const int& n_cols){
   for (size_t i = 0 ; i < n_rows; ++i){
     for (size_t j = 0; j < n_cols; ++j){
-      if (arr[i][j] > 0)
+      if (arr[i][j] > 1)
         printf("arr[%ld][%ld] = %d \t",i,j,arr[i][j]);
       }
+    cout << endl;
   }
 }
 
 void updatedEquTable( int& C, int& B,int& A,  DisjSets& eq_Table){
-
-  if (A > 0){
-    if (A == C && A == B){
-      A = C;
-      }
-  else if (C > 0 && B > 0 && C != B){
-      eq_Table.unionSets(C,B);
-      // C = B;
-      A = C;
-      B = C;
+  if (C > 0 && B > 0 && C != B){
+      eq_Table.unionSets(B,C);
     }
-  }
-
   }
 
 void Labeling(
@@ -47,10 +35,13 @@ void Labeling(
   int label1_ ,  label2_ ,  label3_ ;
   label1_ =  label2_ =  label3_ = 0;
   int pixel = an_img -> GetPixel(i,j) % 254;
+  // current_level = pixel;
+  current_level = 0;
+
 
   // Handel pixels on the margins.
   if (i + j == 0){
-    current_level = levels;
+    current_level = pixel;
   }
   else if (i == 0 && j > 0)
     current_level = labels[i][j-1];
@@ -66,24 +57,27 @@ void Labeling(
       current_level = label1_;
     else {
       // elss, would copy label from C, if C labeled.
-      current_level = max(label2_,label3_);
+      if (label2_ > 0) {
+              current_level = label2_;
+              cout << "C > 0 -- C = " << label2_ << endl;
+            }
+      else if (label2_ == 0 && label3_ > 0){
+                current_level = label3_;
+              cout << "C == 0, B > 0" << endl;
+              cout << "C -> " << label2_ << "B -> " << label3_ << endl;
+            }
     }
-
+    // cout << "Current_level --> " << current_level << endl;
   }
-
   // if all 3 Neighbor of A is not labeled.
   if (current_level == 0) {
     // incr. if the A is region
     current_level = levels + pixel;
     levels = current_level; // update the counter of labels
+
   }
   labels[i][j] = pixel * current_level; // set the label if there is a region on A
-  updatedEquTable( label2_ , label3_ , labels[i][j], eq_Table); // update Equvalance table if needed.
-  // if (labels[i][j] > 0){
-  //
-  // cout << "labels[i][j] -> " << labels[i][j] << endl;
-  // cout << "Label3_ -> " << label3_ << endl;
-  // }
+  updatedEquTable( label2_ , label3_ , labels[i][j], eq_Table); // 
 
 }
 
@@ -92,7 +86,7 @@ bool SeqLablingAlgo(Image* an_image , int**& labels_ ){
   const int n_rows = an_image->num_rows();
   int levels_ = 1;
   size_t i, j;
-  DisjSets EqTable_(n_rows);
+  DisjSets EqTable_(n_rows * n_cols);
 
   cout << "num_rows = " << n_rows << endl;
   cout << "num_columns = " << n_cols << endl;
@@ -105,19 +99,14 @@ bool SeqLablingAlgo(Image* an_image , int**& labels_ ){
   }
   
 
-  cout << "labels_[i][j] = " << labels_[261][163] << "\n" << endl;
-  cout << "Bugs : ->";
-  cout << EqTable_.find(labels_[261][163]) << "\n" << endl;
-
   // Second pass
   for (i = 0 ; i < n_rows ; ++i){
     for (j = 0; j < n_cols ; ++j){
-      // printf("\n\nLabels_[%ld][%ld] -> %d ;\n EqTable_.find()->%d",i,j,labels_[i][j],EqTable_.find(labels_[i][j]));
       labels_[i][j] = EqTable_.find(labels_[i][j]);
     }
   }
 
-  // print2DArr(labels_,n_rows,n_cols);
+  print2DArr(labels_,n_rows,n_cols);
 
 
   return false;
@@ -156,7 +145,7 @@ main(int argc, char **argv){
   // Re-shaping the gray-level for labeled obj.
   for(i = 0 ; i < n_rows ; ++i){
     for (j = 0 ; j < n_cols; ++j){
-      an_image.SetPixel(i,j, labels_[i][j] * 7);
+      an_image.SetPixel(i,j, labels_[i][j] * 17);
     }
   }
 
