@@ -81,7 +81,7 @@ run2:
 
 run3:
 	# ./p3 temp_results/output_p2_two_objects_ouput.pgm temp_results/Database.txt temp_results/output_p3_two_objects.pgm
-	./p3 temp_results/output_p2_many_objects_2.pgm temp_results/Database.txt temp_results/output_p3_many_objects_2.pgm
+	./p3 temp_results/output_p2_many_objects_2.pgm temp_results/Database_manyobjects_2.txt temp_results/output_p3_many_objects_2.pgm
 	open temp_results/output_p3_many_objects_2.pgm;
 
 run4:

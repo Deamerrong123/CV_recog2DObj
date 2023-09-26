@@ -82,7 +82,7 @@ bool writeDataBase ( const std::string& filename , const std::vector<std::vector
   
   for(auto row : values){
     for (auto val : row){
-      fprintf(output, "%f \t",val);
+      fprintf(output, "%d \t",(int) val);
     }
     fprintf(output , "\n");
   }
