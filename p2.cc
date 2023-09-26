@@ -27,10 +27,12 @@ void updatedEquTable( int& C, int& B,int& A,  DisjSets& eq_Table){
   }
 
 /**
-Labeling the pixel at location (@i , @j), and comparing it with its neighbors, updated and marked on the @labels 2D arrays.
+Labeling the pixel at location (@i , @j), 
+and comparing it with its neighbors, 
+updated and marked on the @labels 2D arrays.
 
 @ i        : size_t , where rows locations of pixel
-@ j        : size_t , where columns location of pixel
+@ j        : size_t , wherea columns location of pixel
 @ an_image : Reference to a image object.
 @ labels   : A 2D int array, for clustering purpose.
 @ levels   : reference to int, denotes # of cluster for gray-level.
@@ -157,14 +159,13 @@ main(int argc, char **argv){
   // Deallocated memory
   for (i = 0; i < n_rows ; i++)
     delete labels_[i];
-  delete labels_;
+    delete labels_;
   labels_ = nullptr;
 
   if (!WriteImage(output_img, an_image)){
     cout << "Can't write to file " << output_img<< endl;
     return 0;
   }
-
 
   return 0;
 }

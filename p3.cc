@@ -1,5 +1,6 @@
 // Qizhao Rong
-// p1.cc
+// Due (09/26)
+// p3.cc : Read a given binary pgm image, segment those into different gray-levels with Sequential Labeling Algo, and saved it to another pgm image  
 // 
 #include "image.h"
 #include <cstdio>
@@ -13,17 +14,28 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+/**
+ * @brief convert 
+ * 
+ * @param pixel  :  const reference to int, pixel value 
+ * @param label  :  const reference to int, labeled value
+ * @return int   :  return 1 if pixel match with label values
+ *                  return 0 otherwise.
+ */
 int convert ( const int& pixel , const int& label){
   // Fermat's Little Theorem
-  // if pixel is 0, then will return 0
-  // else if pixel is match with label, then will return 1
-  // else if pixel is not match with label, then will return 0
-  // int d = pow(pixel , PRIME ) % PRIME;
-  // if (d - label == 0) return 1;
   if (pixel == label) return 1;
   return 0;
 }
 
+/**
+ * @brief 
+ * 
+ * @param theta 
+ * @param rho 
+ * @param x_val 
+ * @return int 
+ */
 int solveForY( const double &theta, const double &rho , const double &x_val){
   return (x_val * sin( theta ) + rho ) / cos( theta );
 }
