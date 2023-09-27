@@ -23,7 +23,9 @@ Update the Equivalence Table if label(B) != Label(C).
 */
 void updatedEquTable( int& C, int& B,int& A,  DisjSets& eq_Table){
   if (C > 0 && B > 0 && C != B){
-      eq_Table.unionSets(B,C);
+      int s1 = eq_Table.find(B);
+      int s2 = eq_Table.find(C);
+      eq_Table.unionSets(s1,s2);
     }
   }
 

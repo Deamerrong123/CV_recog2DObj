@@ -1,7 +1,8 @@
 // Qizhao Rong
 // Due (09/26)
-// p3.cc : Read a given binary pgm image, segment those into different gray-levels with Sequential 
-// Labeling Algo, and saved it to another pgm image  
+// p3.cc : Read a given segemented binary pgm image, 
+// and computes object attributes and generates the database
+// of the objects.
 // 
 #include "image.h"
 #include <cstdio>
@@ -16,7 +17,7 @@ using namespace std;
 using namespace ComputerVisionProjects;
 
 /**
- * @brief convert 
+ * @brief convert the matched pixed to become 1, 0 otherwise
  * 
  * @param pixel  :  const reference to int, pixel value 
  * @param label  :  const reference to int, labeled value
@@ -30,12 +31,12 @@ int convert ( const int& pixel , const int& label){
 }
 
 /**
- * @brief 
+ * @brief  solving for value of y, given the values of x. equ: x* cos (@theta) - y * sin (@theta) + jlh
  * 
- * @param theta 
- * @param rho 
- * @param x_val 
- * @return int 
+ * @param theta  :  const reference to double , orientation , in radian
+ * @param rho    : const ref of double, distance between origion
+ * @param x_val  : const ref of double, value for input
+ * @return int
  */
 int solveForY( const double &theta, const double &rho , const double &x_val){
   return (x_val * sin( theta ) + rho ) / cos( theta );
@@ -43,13 +44,13 @@ int solveForY( const double &theta, const double &rho , const double &x_val){
        
 
 /**
- * @brief 
+ * @brief  calculating these attributes valuse by giving an image object
  * 
- * @param an_image 
- * @param label 
- * @param n_rows 
- * @param n_cols 
- * @param values 
+ * @param an_image  :   const ref of an image object
+ * @param label     :   const ref. of int, an distinted label valu
+ * @param n_rows    :   const ref. of int, number of rows of the image
+ * @param n_cols    :   const ref. of int, number of columns of the image
+ * @param values    :   ref. of a 2D arrays, which contains all the attributes of each labeled obj.
  */
 void calculations(const Image& an_image,  const int& label , const int& n_rows, const int& n_cols, std::vector<double>& values){
   size_t i , j;
@@ -96,12 +97,12 @@ void calculations(const Image& an_image,  const int& label , const int& n_rows, 
 }
 
 /**
- * @brief 
+ * @brief write those attribute into a databse file.
  * 
- * @param filename 
- * @param values 
- * @return true 
- * @return false 
+ * @param filename   :   const ref. of string, name of the file
+ * @param values     :   const ref. of 2D arrays, contains the attributes of each labeled obj.
+ * @return true      if the file is opened
+ * @return false     otherwise
  */
 bool writeDataBase ( const std::string& filename , const std::vector<std::vector<double>>& values){
   FILE *output = fopen(filename.c_str(), "w");  
@@ -121,14 +122,14 @@ bool writeDataBase ( const std::string& filename , const std::vector<std::vector
 }
 
 /**
- * @brief 
+ * @brief  drawing a line along a giving orientation , with number of steps.
  * 
- * @param an_image 
- * @param x_bar 
- * @param y_bar 
- * @param theta 
- * @param rho 
- * @param length 
+ * @param an_image   :   ref. of an image obj.
+ * @param x_bar      :   const ref. of double, center of row of this obj
+ * @param y_bar      :   const ref. of doubld, center of col of this obj.
+ * @param theta      :   const ref. of double, the angle of orientation, in radian.
+ * @param rho        :   const ref. of double, the rho
+ * @param length     :   const ref. of int, the number of steps for the line.
  */
 void Drawing( Image &an_image ,const double& x_bar, const double &y_bar , const double &theta , const double &rho, const int &length){
 

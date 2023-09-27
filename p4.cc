@@ -1,6 +1,6 @@
 // Qizhao Rong
 // Due (09/26)
-// p4.cc : Read a given binary pgm image,
+// p4.cc : Read a given binary pgm image, and a database which contains attributes of two objects. By comparing these attributes recognizing objects of this segmented binary pgm image.
 
 #include "image.h"
 #include <cstdio>
@@ -16,26 +16,55 @@ using namespace std;
 using namespace ComputerVisionProjects;
 
 
-bool isEqual(double& val1 , double &val2 , double criteria){
+/**
+ * @brief  compare @val1 and @val2 if their Mean squared root differnece are within the @criteria
+ * 
+ * @param val1     :    const ref. of double, the first value 
+ * @param val1     :    const ref. of double, the second value
+ * @param criteria :    const ref. of double, the accpting rate
+ * @return 
+ *        
+ */
+bool isEqual(const double& val1 , const double &val2 , const double criteria){
   if (
     sqrt((val1 - val2) * (val1 - val2)) > criteria) return false;
   return true;
 }
+
+/**
+ * @brief convert the matched pixed to become 1, 0 otherwise
+ * 
+ * @param pixel  :  const reference to int, pixel value 
+ * @param label  :  const reference to int, labeled value
+ * @return int   :  return 1 if pixel match with label values
+ *                  return 0 otherwise.
+ */
 int convert ( const int& pixel , const int& label){
-  // Fermat's Little Theorem
-  // if pixel is 0, then will return 0
-  // else if pixel is match with label, then will return 1
-  // else if pixel is not match with label, then will return 0
-  // int d = pow(pixel , PRIME ) % PRIME;
-  // if (d - label == 0) return 1;
   if (pixel == label) return 1;
   return 0;
 }
 
+/**
+ * @brief  solving for value of y, given the values of x. equ: x* cos (@theta) - y * sin (@theta) + jlh
+ * 
+ * @param theta  :  const reference to double , orientation , in radian
+ * @param rho    : const ref of double, distance between origion
+ * @param x_val  : const ref of double, value for input
+ * @return int
+ */
 int solveForY( const double &theta, const double &rho , const double &x_val){
   return (x_val * sin( theta ) + rho ) / cos( theta );
 }
        
+/**
+ * @brief  calculating these attributes valuse by giving an image object
+ * 
+ * @param an_image  :   const ref of an image object
+ * @param label     :   const ref. of int, an distinted label valu
+ * @param n_rows    :   const ref. of int, number of rows of the image
+ * @param n_cols    :   const ref. of int, number of columns of the image
+ * @param values    :   ref. of a 2D arrays, which contains all the attributes of each labeled obj.
+ */
 void calculations(const Image& an_image,  const int& label , const int& n_rows, const int& n_cols, std::vector<double>& values){
   size_t i , j;
   int a_pr, b_pr, c_pr , b_ij;
@@ -80,6 +109,14 @@ void calculations(const Image& an_image,  const int& label , const int& n_rows, 
   values[7] = rho;
 }
 
+/**
+ * @brief read those attribute from a databse file.
+ * 
+ * @param filename   :   const ref. of string, name of the file
+ * @param values     :   const ref. of 2D arrays, contains the attributes of each labeled obj.
+ * @return true      if the file is opened
+ * @return false     otherwise
+ */
 bool ReadDatabase( const std::string& filename , std::vector<std::vector<double>>& values){
 
   ifstream input_f;
@@ -105,6 +142,13 @@ bool ReadDatabase( const std::string& filename , std::vector<std::vector<double>
   return true;
 }
 
+/**
+ * @brief   scanning through an image from top left, pixel by pixel. See if there are matched object from the database.
+ * 
+ * @param comparison    :   a 2D array with double values, contains attributes from the testing base.
+ * @param standard      :   a 2D array with double values, contains attributes from the databse.
+ *        
+ */
 void scanning ( 
                std::vector<std::vector<double>> & comparison , const  std::vector<std::vector<double>> &standard ,
                const double& epsilon , std::vector<std::vector<double>>& recognized ){
@@ -126,6 +170,16 @@ void scanning (
   cout << "sizeof recognized() --> " << recognized.size() << endl;
   }
 
+/**
+ * @brief  drawing a line along a giving orientation , with number of steps.
+ * 
+ * @param an_image   :   ref. of an image obj.
+ * @param x_bar      :   const ref. of double, center of row of this obj
+ * @param y_bar      :   const ref. of doubld, center of col of this obj.
+ * @param theta      :   const ref. of double, the angle of orientation, in radian.
+ * @param rho        :   const ref. of double, the rho
+ * @param length     :   const ref. of int, the number of steps for the line.
+ */
 void Drawing( Image &an_image ,const double& x_bar, const double &y_bar , const double &theta , const double &rho, const int &length){
 
   if (length <= 0) 
@@ -183,7 +237,7 @@ main(int argc, char **argv){
   const int n_rows = an_image.num_rows();
   const int n_cols = an_image.num_columns();
 
-  // Object label
+  // Find these distinct labels
   for (i = 0 ; i < n_rows ; ++i){
     for ( j = 0 ; j < n_cols ; ++j){
       pixel = an_image.GetPixel(i,j);
