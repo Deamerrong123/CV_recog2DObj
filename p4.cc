@@ -200,7 +200,7 @@ main(int argc, char **argv){
     D_values.push_back(temp_vals);
   }
 
-  scanning( D_values, D_database , 105 , D_recognized);
+  scanning( D_values, D_database , 300 , D_recognized);
 
   for ( auto label : D_recognized){
     Drawing(an_image , label[1] , label[2] , label[6] * M_PI /180 , label[7] , 20);

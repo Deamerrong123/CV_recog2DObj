@@ -59,10 +59,10 @@ $(PROGRAM_4): $(P4_OBJ)
 
 all: 
 	# make $(PROGRAM_NAME) 
-	make $(PROGRAM_1)
-	make $(PROGRAM_2)
+	# make $(PROGRAM_1)
+	# make $(PROGRAM_2)
 	make $(PROGRAM_3)
-	make $(PROGRAM_4)
+	# make $(PROGRAM_4)
 
 
 rundemo:
@@ -85,10 +85,10 @@ run3:
 	open temp_results/output_p3_many_objects_2.pgm;
 
 run4:
-	./p4 temp_results/output_p2_many_objects_1.pgm temp_results/Database.txt temp_results/output_p4_many_objects_1.pgm
-	# ./p4 output_p3_many_objects_2.pgm temp_results/Database.txt temp_results/output_p4_many_objects_2.pgm
-	open temp_results/output_p4_many_objects_1.pgm;
-	# open temp_results/output_p3_many_objects_2.pgm;
+	# ./p4 temp_results/output_p2_many_objects_1.pgm temp_results/Database.txt temp_results/output_p4_many_objects_1.pgm
+	./p4 temp_results/output_p2_many_objects_2.pgm temp_results/Database.txt temp_results/output_p4_many_objects_2.pgm
+	# open temp_results/output_p4_many_objects_1.pgm;
+	open temp_results/output_p4_many_objects_2.pgm;
 clean:
 	(rm -f *.o; rm p3)
 
