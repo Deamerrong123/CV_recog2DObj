@@ -1,5 +1,7 @@
 // Qizhao Rong
-// p1.cc
+// Due (09/26)
+// p3.cc : Read a given binary pgm image, segment those into different gray-levels with Sequential 
+// Labeling Algo, and saved it to another pgm image  
 // 
 #include "image.h"
 #include <cstdio>
@@ -13,22 +15,42 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+/**
+ * @brief convert 
+ * 
+ * @param pixel  :  const reference to int, pixel value 
+ * @param label  :  const reference to int, labeled value
+ * @return int   :  return 1 if pixel match with label values
+ *                  return 0 otherwise.
+ */
 int convert ( const int& pixel , const int& label){
   // Fermat's Little Theorem
-  // if pixel is 0, then will return 0
-  // else if pixel is match with label, then will return 1
-  // else if pixel is not match with label, then will return 0
-  // int d = pow(pixel , PRIME ) % PRIME;
-  // if (d - label == 0) return 1;
   if (pixel == label) return 1;
   return 0;
 }
 
+/**
+ * @brief 
+ * 
+ * @param theta 
+ * @param rho 
+ * @param x_val 
+ * @return int 
+ */
 int solveForY( const double &theta, const double &rho , const double &x_val){
   return (x_val * sin( theta ) + rho ) / cos( theta );
 }
        
 
+/**
+ * @brief 
+ * 
+ * @param an_image 
+ * @param label 
+ * @param n_rows 
+ * @param n_cols 
+ * @param values 
+ */
 void calculations(const Image& an_image,  const int& label , const int& n_rows, const int& n_cols, std::vector<double>& values){
   size_t i , j;
   int a_pr, b_pr, c_pr , b_ij;
@@ -69,10 +91,18 @@ void calculations(const Image& an_image,  const int& label , const int& n_rows, 
   roundedness = e_min / e_max;
   values[5] = roundedness;
   rho = y_bar * cos(theta_1) - x_bar * sin( theta_1 );
-  values[6] = theta_1 * 180 / M_PI;
+  values[6] = theta_1;
   values[7] = rho;
 }
 
+/**
+ * @brief 
+ * 
+ * @param filename 
+ * @param values 
+ * @return true 
+ * @return false 
+ */
 bool writeDataBase ( const std::string& filename , const std::vector<std::vector<double>>& values){
   FILE *output = fopen(filename.c_str(), "w");  
   if (output == 0){
@@ -90,6 +120,16 @@ bool writeDataBase ( const std::string& filename , const std::vector<std::vector
   return true;
 }
 
+/**
+ * @brief 
+ * 
+ * @param an_image 
+ * @param x_bar 
+ * @param y_bar 
+ * @param theta 
+ * @param rho 
+ * @param length 
+ */
 void Drawing( Image &an_image ,const double& x_bar, const double &y_bar , const double &theta , const double &rho, const int &length){
 
   if (length <= 0) 
@@ -123,7 +163,7 @@ int
 main(int argc, char **argv){
   
   if (argc!=4) {
-    printf("Usage: %s file1 file2 file3\n", argv[0]);
+    printf("Usage: %s file1 file2\n", argv[0]);
     return 0;
   }
   const string input_bin_img(argv[1]);
@@ -158,14 +198,11 @@ main(int argc, char **argv){
     calculations(an_image , label , n_rows, n_cols, temp_vals);
     values_.push_back(temp_vals);
   }
-
-  writeDataBase(output_database , values_);
-
   
 
   // Display positions and orientations of objects
-  for( auto value : values_ ) {
-    Drawing(an_image , value[1] , value[2] , value[6] * M_PI /180, value[7] , 20); 
+  for( auto label : values_ ) {
+    Drawing(an_image , label[1] , label[2] , label[6] * M_PI /180 , label[7] , 20);
   }
 
   if (!WriteImage(output_img, an_image)){
