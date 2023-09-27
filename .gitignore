@@ -2,7 +2,7 @@
 *.log
 
 # ignore All pgm files that contains "_output"
-*_output.pgm
+*.pgm
 
 # ignore All .o files
 *.o
@@ -10,3 +10,15 @@
 # ignore directories Results
 Results/
 temp_results/
+
+# ignore pdf file
+*.pdf
+
+# ignore executable file as well
+p1
+p2
+p3
+p4
+
+# ignore this too.
+lcon_
