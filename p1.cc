@@ -46,6 +46,8 @@ main(int argc, char **argv){
       else{another_img.SetPixel(i,j,255);}
     }
   }
+
+  an_image.SetNumberGrayLevels( 255 );
   
   // Save the binary-image to another pgm file.
   if (!WriteImage(output_img, another_img)){

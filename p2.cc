@@ -165,6 +165,8 @@ main(int argc, char **argv){
     delete labels_;
   labels_ = nullptr;
 
+  an_image.SetNumberGrayLevels( 255 );
+
   if (!WriteImage(output_img, an_image)){
     cout << "Can't write to file " << output_img<< endl;
     return 0;
