@@ -69,7 +69,7 @@ void calculations(const Image& an_image,  const int& label , const int& n_rows, 
   roundedness = e_min / e_max;
   values[5] = roundedness;
   rho = y_bar * cos(theta_1) - x_bar * sin( theta_1 );
-  values[6] = theta_1;
+  values[6] = theta_1 * 180 / M_PI;
   values[7] = rho;
 }
 
@@ -82,7 +82,7 @@ bool writeDataBase ( const std::string& filename , const std::vector<std::vector
   
   for(auto row : values){
     for (auto val : row){
-      fprintf(output, "%d \t",(int) val);
+      fprintf(output, "%f \t",val);
     }
     fprintf(output , "\n");
   }
@@ -123,7 +123,7 @@ int
 main(int argc, char **argv){
   
   if (argc!=4) {
-    printf("Usage: %s file1 file2\n", argv[0]);
+    printf("Usage: %s file1 file2 file3\n", argv[0]);
     return 0;
   }
   const string input_bin_img(argv[1]);
@@ -158,11 +158,14 @@ main(int argc, char **argv){
     calculations(an_image , label , n_rows, n_cols, temp_vals);
     values_.push_back(temp_vals);
   }
+
+  writeDataBase(output_database , values_);
+
   
 
   // Display positions and orientations of objects
-  for( auto label : values_ ) {
-    Drawing(an_image , label[1] , label[2] , label[6] * M_PI /180 , label[7] , 20);
+  for( auto value : values_ ) {
+    Drawing(an_image , value[1] , value[2] , value[6] * M_PI /180, value[7] , 20); 
   }
 
   if (!WriteImage(output_img, an_image)){
@@ -171,3 +174,4 @@ main(int argc, char **argv){
   }
   return 0;
 }
+
